@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+.cache/
+*.joblib
+wa_cache.json
+player_cache.json
+.env
+recommender_model.joblib
+

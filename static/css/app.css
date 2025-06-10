@@ -1,0 +1,22 @@
+/* Paleta oscura + toques azul-cian */
+
+body { font-size: 0.95rem; }
+
+.navbar-brand { letter-spacing: .5px; }
+
+.player-hero {
+  background: linear-gradient(135deg,#38424f 0%,#202832 100%);
+  border: 1px solid rgba(255,255,255,.05);
+}
+
+.card,
+.player-card:hover {
+  transition: transform .15s;
+}
+
+.player-card:hover { transform: translateY(-4px); }
+.table thead th { white-space: nowrap; }
+
+.table td, table th { vertical-align: middle !important; text-align: center; }
+.table td.text-start { text-align: left !important; }
+

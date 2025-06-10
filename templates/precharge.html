@@ -1,0 +1,206 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <style>
+    /* 1) Estilo de la tarjeta y la estrella */
+    .player-card .star-btn {
+      border: 2px solid #ffc107;     /* borde amarillo */
+      background: none;
+      border-radius: 0.375rem;
+      padding: 0.5rem;
+      transition: transform 0.15s ease;
+    }
+    /* Escondemos el icono en estado “no favorito” */
+    .player-card .star-btn i {
+      color: transparent;
+      transition: color 0.15s ease;
+    }
+    /* Cuando data-favorited="true", coloreamos la estrella */
+    .player-card .star-btn[data-favorited="true"] i {
+      color: #ffc107; /* relleno amarillo */
+    }
+    .player-card .star-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* 2) Animación “pop” al marcar favorito */
+    .player-card .star-btn.pop-animate {
+      animation: pop 0.3s ease-out;
+    }
+    @keyframes pop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Deportistas precargados</h1>
+
+{# Recorremos todos los índices de SPORTS_LIST #}
+{% for idx in range(sports|length) %}
+  {# Filtramos los jugadores precargados de este deporte, ahora usando “players” #}
+  {% set group = players
+       | selectattr("DeporteYHabilidades.sport", "equalto", idx|string)
+       | list %}
+  {% if group %}
+    {# → Cabecera clicable que activa el collapse para este deporte #}
+    <h4 class="text-info mt-4 border-bottom pb-1"
+        role="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#pre_sport{{ idx }}"
+        aria-expanded="false"
+        aria-controls="pre_sport{{ idx }}">
+      {{ sports[idx] }}
+      <i data-lucide="chevron-down" class="ms-1"></i>
+    </h4>
+
+    {# → Contenedor colapsable #}
+    <div id="pre_sport{{ idx }}" class="collapse">
+      <div class="row g-4">
+        {% for p in group %}
+          {% set pid = p.DatosPersonales.id %}
+          <div class="col-md-6 col-lg-4" id="precharge-card-{{ pid }}">
+            <div class="card h-100 shadow-sm player-card position-relative">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title mb-1">{{ p.DatosPersonales.name }}</h5>
+                <small class="text-secondary d-block mb-2">
+                  {{ sports[idx] }}
+                </small>
+
+                <p class="flex-grow-1 small">
+                  Edad <b>{{ p.DatosPersonales.age }}</b><br>
+                  {% if p.DeporteYHabilidades.Position %}
+                    Posición <b>{{ p.DeporteYHabilidades.Position }}</b>
+                  {% endif %}
+                </p>
+
+                {#  Botón “estrella” para marcar/desmarcar como favorito #}
+                <button
+                  type="button"
+                  class="btn star-btn toggle-fav"
+                  data-id="{{ pid }}"
+                  data-favorited="false"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Marcar como favorito">
+                  <i data-lucide="star"></i>
+                </button>
+
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {# Fin collapse #}
+  {% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    // 1) Inicializar iconos Lucide
+    lucide.createIcons();
+
+    // 2) Inicializar Bootstrap tooltips en todos los botones con data-bs-toggle="tooltip"
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function(el) {
+      return new bootstrap.Tooltip(el);
+    });
+
+    // 3) Funcionamiento de cada botón estrella
+    var botones = document.querySelectorAll('.toggle-fav');
+    Array.prototype.forEach.call(botones, function(btn) {
+      btn.addEventListener('click', function() {
+        var pid = btn.getAttribute('data-id');
+
+        // Llamada AJAX para marcar como favorito (y quitarlo de precargados)
+        fetch('/api/precharge/favorite/' + pid, {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(function(resp) {
+          if (!resp.ok) {
+            throw new Error('Error al marcar favorito');
+          }
+          return resp.json();
+        })
+        .then(function(json) {
+          if (json.success) {
+            // 4) Cambiamos el atributo data-favorited
+            btn.setAttribute('data-favorited', 'true');
+
+            // 5) Sustituir icono “star” por “star-filled”
+            btn.innerHTML = '<i data-lucide="star-filled"></i>';
+
+            // 6) Animación “pop”
+            btn.classList.add('pop-animate');
+            setTimeout(function() {
+              btn.classList.remove('pop-animate');
+            }, 300);
+
+            // 7) Volvemos a inicializar Lucide para renderizar el nuevo icono
+            lucide.createIcons();
+
+            // 8) Flash notice
+            showFlashNotice('Añadido a favoritos ✅');
+
+            // 9) Eliminar la tarjeta (columna) del deportista del DOM
+            var cardWrapper = document.getElementById('precharge-card-' + pid);
+            if (cardWrapper) {
+                // opcional: agregamos una ligera animación de “fade-out”
+                cardWrapper.style.transition = "opacity 0.2s ease";
+                cardWrapper.style.opacity = "0";
+                setTimeout(function() {
+                  cardWrapper.remove();
+              }, 200);
+            }
+          } else {
+            throw new Error(json.error || 'Respuesta inesperada');
+          }
+        })
+        .catch(function(e) {
+          console.error(e);
+          alert('No se pudo marcar/desmarcar el deportista.');
+        });
+      });
+    });
+  });
+
+  // -------------------
+  // Función para mostrar “flash notice” temporal
+  function showFlashNotice(message) {
+    // Crear contenedor si no existe
+    if (!document.getElementById('flash-container')) {
+      var container = document.createElement('div');
+      container.id = 'flash-container';
+      container.style.position = 'fixed';
+      container.style.top = '1rem';
+      container.style.right = '1rem';
+      container.style.zIndex = '1050';
+      document.body.appendChild(container);
+    }
+    // Crear el aviso
+    var flash = document.createElement('div');
+    flash.className = 'alert alert-success';
+    flash.textContent = message;
+    flash.style.opacity = '0';
+    flash.style.transition = 'opacity 0.3s ease';
+    document.getElementById('flash-container').appendChild(flash);
+    // Fade-in
+    setTimeout(function() {
+      flash.style.opacity = '1';
+    }, 50);
+    // Después de 2 segundos, fade-out y quitar el elemento
+    setTimeout(function() {
+      flash.style.opacity = '0';
+      setTimeout(function() {
+        flash.remove();
+      }, 300);
+    }, 2000);
+  }
+</script>
+{% endblock %}

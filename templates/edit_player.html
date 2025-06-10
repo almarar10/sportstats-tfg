@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1 class="mb-4">Editar Deportista</h1>
+
+<form method="post" class="row g-3 needs-validation" novalidate>
+  <!-- ─────────── Datos personales ─────────── -->
+  <div class="col-md-6">
+    <label class="form-label">ID interno</label>
+    <input name="id" class="form-control" value="{{ player.DatosPersonales.id }}" readonly>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Nombre completo</label>
+    <input name="name" class="form-control" required
+           value="{{ player.DatosPersonales.name }}">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Primer nombre</label>
+    <input name="FirstName" class="form-control"
+           value="{{ player.DatosPersonales.FirstName }}">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Apellidos</label>
+    <input name="LastName" class="form-control"
+           value="{{ player.DatosPersonales.LastName }}">
+  </div>
+
+  <div class="col-md-3">
+    <label class="form-label">Edad</label>
+    <input name="age" type="number" class="form-control"
+           value="{{ player.DatosPersonales.age }}">
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Género</label>
+    <select name="Gender" class="form-select">
+      <option value="" {{ '' == player.DatosPersonales.Gender and 'selected' or '' }}>-</option>
+      <option {{ 'Masculino' == player.DatosPersonales.Gender and 'selected' or '' }}>Masculino</option>
+      <option {{ 'Femenino'   == player.DatosPersonales.Gender and 'selected' or '' }}>Femenino</option>
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">Lugar de nacimiento</label>
+    <input name="placeofbirth" class="form-control"
+           value="{{ player.DatosPersonales.placeofbirth }}">
+  </div>
+
+  <hr class="my-4">
+  <h5 class="fw-bold">Datos deportivos</h5>
+
+  <div class="col-md-4">
+    <label class="form-label">Deporte</label>
+    <select name="sport" class="form-select" id="sport-select">
+      {% for s in sports %}
+        <option value="{{ loop.index0 }}"
+          {{ loop.index0 == player.DeporteYHabilidades.sport|int and 'selected' or '' }}>
+          {{ s }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Nivel</label>
+    <input name="sportLevel" class="form-control"
+           value="{{ player.DeporteYHabilidades.sportLevel }}">
+  </div>
+  <div class="col-md-4">
+    <label class="form-label">Posición / Prueba</label>
+    <input name="Position" class="form-control"
+           value="{{ player.DeporteYHabilidades.Position }}">
+  </div>
+
+  <!-- ─── Athlete ID (solo Atletismo) ─── -->
+  <div class="col-md-4" id="athlete-field">
+    <label class="form-label">
+      Athlete&nbsp;ID <small class="text-muted">(World Athletics)</small>
+    </label>
+    <input name="athlete_id" class="form-control"
+           value="{{ player.DeporteYHabilidades.athlete_id }}">
+  </div>
+
+  <!-- Dorsal solo en Fútbol (2) y NBA (1) -->
+  <div class="col-md-4 d-none" id="jersey-field">
+    <label class="form-label">Dorsal</label>
+    <input name="jersey" class="form-control"
+           value="{{ player.DeporteYHabilidades.jersey }}">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Habilidades (coma separadas)</label>
+    <input name="sportIndexList" class="form-control"
+           value="{{ player.DeporteYHabilidades.sportIndexList|join(', ') }}">
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Lado hábil</label>
+    <input name="Side" class="form-control"
+           value="{{ player.DeporteYHabilidades.Side }}">
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">¿Titular?</label>
+    <select name="StartPlayer" class="form-select">
+      <option value="" {{ '' == player.DeporteYHabilidades.StartPlayer and 'selected' or '' }}>-</option>
+      <option {{ 'Sí' == player.DeporteYHabilidades.StartPlayer and 'selected' or '' }}>Sí</option>
+      <option {{ 'No' == player.DeporteYHabilidades.StartPlayer and 'selected' or '' }}>No</option>
+    </select>
+  </div>
+
+  <div class="col-12">
+    <label class="form-label">Bio</label>
+    <textarea name="bio" class="form-control" rows="2">{{ player.DatosPersonales.bio }}</textarea>
+  </div>
+  <div class="col-12">
+    <label class="form-label">Acerca de</label>
+    <textarea name="about" class="form-control" rows="2">{{ player.DatosPersonales.about }}</textarea>
+  </div>
+
+  <div class="col-12 text-end mt-3">
+    <button class="btn btn-primary">Guardar</button>
+    <a href="{{ url_for('list_players') }}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+
+<!-- ─── muestra/oculta Athlete ID según deporte ─── -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const sportSel = document.getElementById('sport-select');
+  const athField = document.getElementById('athlete-field');
+
+  function toggleAthField(){
+    athField.classList.toggle('d-none', sportSel.value !== '0');
+  }
+  sportSel.addEventListener('change', toggleAthField);
+  toggleAthField();     // estado inicial al cargar
+});
+</script>
+
+<!--Muestra/oculta dorsal, solo para fubtol y nba-->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const sportSel = document.getElementById('sport-select');
+  const jerseyF  = document.getElementById('jersey-field');
+  function toggle(){ jerseyF.classList.toggle('d-none', !['1','2'].includes(sportSel.value)); }
+  sportSel.addEventListener('change', toggle);
+  toggle();
+});
+</script>
+{% endblock %}

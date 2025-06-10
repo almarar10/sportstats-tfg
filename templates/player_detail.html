@@ -1,0 +1,431 @@
+{% extends "layout.html" %}
+{% block content %}
+<section class="player-hero rounded-4 p-4 mb-4 shadow-sm">
+  <h2 class="display-5 fw-semibold mb-0">{{ player.DatosPersonales.name }}</h2>
+  <p class="text-secondary mb-0">
+    {{ sports[player.DeporteYHabilidades.sport|int] }}
+    {% if player.DeporteYHabilidades.Position %}
+      • {{ player.DeporteYHabilidades.Position }}
+    {% endif %}
+  </p>
+</section>
+
+<!-- meta para JS -->
+<div id="player-meta"
+     data-sport="{{ player.DeporteYHabilidades.sport}}"
+     data-name="{{ player.DatosPersonales.name}}"
+     data-id="{{ player.DeporteYHabilidades.athlete_id }}">
+</div>
+
+<div class="col-lg-4">
+  <div class="card h-100 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">Datos personales</h5>
+      <div class="table-responsive">
+        <table class="table table-dark table-sm mb-0">
+          <tbody>
+            <tr><th scope="row">Edad</th><td>{{ player.DatosPersonales.age }}</td></tr>
+            <tr><th scope="row">Nacimiento</th><td>{{ player.DatosPersonales.placeofbirth }}</td></tr>
+            <tr><th scope="row">Nivel</th><td>{{ player.DeporteYHabilidades.sportLevel }}</td></tr>
+            <tr><th scope="row">Biografía</th><td>{{ player.DatosPersonales.bio }}</td></tr>
+            <tr><th scope="row">Acerca de</th><td>{{ player.DatosPersonales.about }}</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% if player.DeporteYHabilidades.sport == '1' %}
+  <form method="get"
+        action="{{ url_for('player_detail', pid=player.DatosPersonales.id) }}"
+        class="row g-3 align-items-end mb-4">
+    <div class="col-md-3">
+      <label class="form-label">Temporada</label>
+      <input id="season-input" name="season" type="number" class="form-control"
+             value="{{ player.season or '' }}">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">ID del partido</label>
+      <input id="game-input"  name="game" type="number" class="form-control"
+             value="{{ player.game_id or '' }}">
+    </div>
+    <div class="col-md-2">
+      <button type="submit" id="stats-btn" class="btn btn-primary">
+        Guardar y Ver Estadísticas
+      </button>
+    </div>
+  </form>
+
+  {% if player.DeporteYHabilidades.games %}
+    <div class="mt-3">
+      <h6 class="fw-semibold">Partidos guardados</h6>
+      <ul class="list-group list-group-flush">
+        {% for g in player.DeporteYHabilidades.games %}
+          <li class="list-group-item bg-dark px-2">
+            <a class="link-info"
+              href="{{ url_for('player_detail',
+                                pid=player.DatosPersonales.id,
+                                season=g.season,
+                                game=g.game_id) }}">
+              Season {{ g.season }} – Game {{ g.game_id }}
+              ({{ g.pts }} PTS / {{ g.reb }} REB / {{ g.ast }} AST)
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endif %}
+
+
+
+
+<div class="card-body" id="api-block">
+
+  {# ── Fórmula-1 ─────────────────────────────────────── #}
+  {% if player.DeporteYHabilidades.sport == '3' %}
+    {% set drv = api_data.response[0] if api_data.response else None %}
+    {% if drv %}
+      <div class="row g-3">
+        <div class="col-md-4 text-center">
+          {% if drv.image %}
+            <img src="{{ drv.image }}" class="img-fluid rounded" alt="{{ drv.name }}">
+          {% endif %}
+        </div>
+        <div class="col-md-8">
+          <h5>{{ drv.name }}</h5>
+          <p><b>Nacionalidad:</b> {{ drv.nationality }}</p>
+          <p><b>Fecha de nacimiento:</b> {{ drv.birthdate }}</p>
+          <p><b>Entradas GP:</b> {{ drv.grands_prix_entered }}</p>
+          <p><b>Mundiales:</b> {{ drv.world_championships }}</p>
+          <p><b>Podios:</b> {{ drv.podiums }}</p>
+          <p><b>Puntos en carrera:</b> {{ drv.career_points }}</p>
+          <hr>
+          <h6>Equipos por temporada</h6>
+          <ul class="list-unstyled">
+            {% for t in drv.teams %}
+              <li>
+                {{ t.season }} – {{ t.team.name }}
+                <img src="{{ t.team.logo }}" height="20" class="ms-1 align-text-top">
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% else %}
+      <p class="text-muted">Sin datos del piloto.</p>
+    {% endif %}
+
+  {# ── MMA ───────────────────────────────────────────── #}
+  {% elif player.DeporteYHabilidades.sport == '4' %}
+    {% set f = api_data.response[0] if api_data.response else None %}
+    {% if f %}
+      <div class="row g-3">
+        <div class="col-md-4 text-center">
+          {% if f.photo %}
+            <img src="{{ f.photo }}"
+                 class="img-fluid rounded"
+                 alt="{{ f.name }}">
+          {% endif %}
+        </div>
+        <div class="col-md-8">
+          <h5>{{ f.name }}</h5>
+          <p><b>Apodo:</b> {{ f.nickname }}</p>
+          <p><b>Edad:</b> {{ f.age }}</p>
+          <p><b>Altura:</b> {{ f.height }}</p>
+          <p><b>Peso:</b> {{ f.weight }}</p>
+          <p><b>Reach:</b> {{ f.reach }}</p>
+          <p><b>Stance:</b> {{ f.stance }}</p>
+          <p><b>Categoría:</b> {{ f.category }}</p>
+          <p><b>Equipo:</b> {{ f.team.name }}</p>
+        </div>
+      </div>
+    {% else %}
+      <p class="text-muted">Sin datos del peleador.</p>
+    {% endif %}  
+
+  {# ── Cualquier otro deporte (NBA, fútbol, atletismo…) ── #}
+  {% else %}
+    <em>Cargando datos…</em>
+  {% endif %}
+</div>
+
+
+<a href="{{ url_for('list_players') }}" class="btn btn-outline-light mt-4">
+  <i data-lucide="chevron-left"></i> Volver
+</a>
+{% endblock %}
+
+{% block scripts %}
+<script>
+/* ---------------- helpers ---------------- */
+function esc (s){ return String(s ?? '').replace(/[<>]/g,''); }
+function get (o,k,d){ return (o && o[k]!==undefined) ? o[k] : d; }
+function alertErr(msg){
+  document.getElementById('api-block').innerHTML =
+    `<div class="alert alert-danger">${esc(msg)}</div>`;
+}
+
+(function(){
+"use strict";
+
+/* ---- datos meta ---- */
+const meta  = document.getElementById('player-meta');
+const sport = parseInt(meta.dataset.sport, 10) || 0;
+const name  = encodeURIComponent(meta.dataset.name);
+const apiID = meta.dataset.id || "";
+
+/* -------- inputs y botón -------- */
+  const seasonInp = document.querySelector('input[name="season"]');
+  const gameInp   = document.querySelector('input[name="game"]');
+  const btnStats  = document.getElementById("stats-btn");
+
+/* =========================================================
+   showStats(resp)  –  versión modular por deporte
+   ========================================================= */
+function showStats(resp) {
+
+  /* -------- validación respuesta -------- */
+  if (!resp.ok) { alertErr(resp.error || "Respuesta inválida"); return; }
+  const d = resp.data || {};
+
+  /* ====================================================== */
+  /* 1)   ATLETISMO  (sport === 0)                          */
+  /* ====================================================== */
+  if (sport === 0 || (d.basic && !d.basic.player)) {
+
+    const b   = d.basic || {};
+    const pbs = d.pbs   || [];
+
+    let html  = `<p><b>Nacionalidad:</b> ${esc(b.country)}</p>`;
+    html     += `<h6 class="fw-semibold mt-3">Marcas personales</h6>`;
+
+    if (!pbs.length) {
+      html += "<p class='text-muted'>Sin marcas personales.</p>";
+    } else {
+      html += `
+      <div class="table-responsive">
+        <table class="table table-dark table-sm table-bordered">
+          <thead class="table-primary">
+            <tr><th>Prueba</th><th>Marca</th><th>Año</th><th>Indoor</th></tr>
+          </thead><tbody>`;
+      pbs.forEach(pb => {
+        html += `<tr>
+          <td>${esc(pb.discipline)}</td>
+          <td>${esc(pb.performance)}</td>
+          <td>${pb.season}</td>
+          <td>${pb.indoor ? "Sí" : "No"}</td>
+        </tr>`;
+      });
+      html += "</tbody></table></div>";
+    }
+
+    document.getElementById("api-block").innerHTML = html;
+    return;                                         /* ← FIN Atletismo */
+  }
+
+  /* ====================================================== */
+  /* 2)   BALONCESTO  (sport === 1)                         */
+  /* ====================================================== */
+  if (sport === 1) {
+    const st = d.response?.[0];
+    if (!st) { alertErr("Sin datos para ese partido"); return; }
+
+    /* -------- tabla completa -------- */
+    const html = `
+      <div class="table-responsive">
+        <table class="table table-dark table-sm table-bordered w-auto">
+          <thead class="table-primary text-center">
+            <tr>
+              <th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>TO</th><th>+/-</th>
+            </tr>
+          </thead>
+          <tbody class="text-center fw-semibold">
+            <tr>
+              <td>${st.min}</td>
+              <td>${st.points}</td>
+              <td>${st.totReb}</td>
+              <td>${st.assists}</td>
+              <td>${st.steals}</td>
+              <td>${st.blocks}</td>
+              <td>${st.turnovers}</td>
+              <td>${st.plusMinus}</td>
+            </tr>
+          </tbody>
+          <thead class="table-primary text-center">
+            <tr>
+              <th colspan="2">FGM / FGA&nbsp;(%)</th>
+              <th colspan="2">3PM / 3PA&nbsp;(%)</th>
+              <th colspan="2">FTM / FTA&nbsp;(%)</th>
+              <th>OFF&nbsp;REB</th><th>DEF&nbsp;REB</th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr>
+              <td colspan="2">${st.fgm} / ${st.fga} (${st.fgp}%)</td>
+              <td colspan="2">${st.tpm} / ${st.tpa} (${st.tpp}%)</td>
+              <td colspan="2">${st.ftm} / ${st.fta} (${st.ftp}%)</td>
+              <td>${st.offReb}</td>
+              <td>${st.defReb}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>`;
+
+    document.getElementById("api-block").innerHTML = html;
+    return;                          /* ← FIN basket */
+  }
+
+  /* ====================================================== */
+  /* 3)   FÚTBOL  (sport === 2)  +  GENÉRICO                */
+  /* ====================================================== */
+
+  const p   = d.basic.player ?? d.basic;   /* fallback */
+  const yrs = d.seasons      || [];
+  const stM = d.stats        || {};
+
+  /* fallback a statistics embebido en basic */
+  if (!yrs.length && Array.isArray(d.basic.statistics)) {
+    const tag = d.basic.statistics[0].league
+                ? d.basic.statistics[0].league.season : "Actual";
+    yrs.push(tag);
+    stM[tag] = d.basic.statistics;
+  }
+
+  /* ---------- cabecera perfil ---------- */
+  let html = `
+    <div class="row mb-3 align-items-center">
+      <div class="col-md-4 text-center">
+        <div class="display-6 fw-bold">${esc(p.age)}</div>
+        <small class="text-muted">años</small>
+      </div>
+      <div class="col-md-8">
+        <p class="mb-1"><b>Nacionalidad:</b> ${esc(p.nationality ?? p.country)}</p>
+        <p class="mb-1"><b>Altura:</b> ${esc(p.height)}</p>
+        <p class="mb-1"><b>Peso:</b> ${esc(p.weight)}</p>
+      </div>
+    </div>
+    <h6 class="fw-semibold mb-2">Temporadas</h6>`;
+
+  if (!yrs.length) {
+    html += "<p class='text-muted'>Sin estadísticas.</p>";
+    document.getElementById("api-block").innerHTML = html;
+    return;
+  }
+
+  /* ---------- tablas por temporada ---------- */
+  yrs.slice().reverse().forEach(yr => {
+    const arr = stM[yr] || [];
+    if (!arr.length) return;
+
+    /* agregados */
+    const sum = {
+      games:0, goals:0, assists:0, minutes:0, shots:0,
+      yellow:0, red:0, rebounds:0, points:0
+    };
+
+    arr.forEach(st => {
+      sum.games    += +get(get(st,"games",{}),"appearences",0);
+      sum.minutes  += +get(get(st,"games",{}),"minutes",0);
+      sum.goals    += +get(get(st,"goals",{}),"total",0);
+      sum.assists  += +get(get(st,"goals",{}),"assists",0);
+      sum.shots    += +get(get(st,"shots",{}),"total",0);
+      sum.yellow   += +get(get(st,"cards",{}),"yellow",0);
+      sum.red      += +get(get(st,"cards",{}),"red",0);
+      sum.points   += +get(get(st,"points",{}),"total",0);
+      sum.rebounds += +get(get(st,"rebounds",{}),"total",0);
+    });
+
+    const team = esc(get(get(arr[0],"team",{}),"name",""));
+
+    let cols, vals;
+    if (sport === 2) {                 /* fútbol */
+      cols = ["Part.","Goles","Asist.","Min.","Tiros","Amar.","Rojas"];
+      vals = [sum.games,sum.goals,sum.assists,sum.minutes,sum.shots,sum.yellow,sum.red];
+    } else {                           /* genérico para otros */
+      cols = ["Dato","Valor"];
+      vals = ["Sin mapper", esc(JSON.stringify(sum))];
+    }
+
+    html += `
+      <div class="table-responsive mb-3">
+        <table class="table table-dark table-sm table-bordered align-middle">
+          <thead class="table-primary">
+            <tr><th colspan="${cols.length}">${yr} – ${team}</th></tr>
+            <tr>${cols.map(c => `<th>${c}</th>`).join("")}</tr>
+          </thead>
+          <tbody>
+            <tr>${vals.map(v => `<td>${v}</td>`).join("")}</tr>
+          </tbody>
+        </table>
+      </div>`;
+  });
+
+  document.getElementById("api-block").innerHTML = html;
+}
+/* ----------------------------------------------------------
+   loadStats()  –  arma la URL y hace fetch según el deporte
+   ---------------------------------------------------------- */
+function loadStats() 
+{
+   // ← Si es MMA, NO hacemos nada por JS (el servidor ya pasó api_data)
+  if(sport === 4){
+    return
+  }
+
+  /* ---- Baloncesto (sport 1) -------------------------------- */
+  if (sport === 1) {
+    const season = document.querySelector('input[name="season"]').value.trim();
+    const game   = document.querySelector('input[name="game"]').value.trim();
+    if (!season || !game) {
+      alertErr("Indica temporada y ID de partido");
+      return;
+    }
+    const url = `/api/player-info/${name}?sport=${sport}` +
+                `&id=${apiID}&season=${season}&game=${game}`;
+
+    document.getElementById("api-block").innerHTML = "<em>Cargando…</em>";
+    fetch(url)
+      .then((r) => r.json())
+      .then(showStats)
+      .catch(() => alertErr("Fallo de red hacia la API"));
+    return;  
+  }
+
+  /* ---- Genérico para Atletismo (sport 0) y Fútbol (sport 2) ---- */
+  const url = `/api/player-info/${name}?sport=${sport}`;
+  document.getElementById("api-block").innerHTML = "<em>Cargando datos…</em>";
+  fetch(url)
+    .then((r) => r.json())
+    .then(showStats)
+    .catch(() => alertErr("Fallo de red hacia la API"));
+}
+
+/* ----------------------------------------------------------
+   arranque y listeners
+   ---------------------------------------------------------- */
+if (btnStats) {
+  btnStats.addEventListener("click", e => {
+    // Para NBA (sport 1) dejamos que el formulario se envíe normalmente
+    if (sport === 1) {
+      return; 
+    }
+    // Para los demás deportes, seguimos con tu lógica AJAX
+    e.preventDefault();
+    loadStats();
+  });
+}
+  // Auto-cargar estadísticas si es NBA y ya tenemos filtros en la URL
+  if (sport === 1 && seasonInp.value && gameInp.value) {
+    loadStats();
+  }
+
+/* Autocarga solo si NO es baloncesto (para NBA esperamos click) */
+if (sport !== 1 && sport!==3 && sport !==4) loadStats();
+
+
+})();
+</script>
+{% endblock %}

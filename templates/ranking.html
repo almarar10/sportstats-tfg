@@ -1,0 +1,140 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<style>
+  .sport-card{margin-bottom:1.5rem}
+  .sport-header{cursor:pointer}
+  .card-body{background:#1e2228}
+  .dt-icon{font-size:1rem;vertical-align:middle}
+  .th, td { vertical-align: middle !important; }
+  .table td, table th { vertical-align: middle !important; text-align: center; }
+  .table td.text-start { text-align: left !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Ranking</h1>
+
+{% for deporte, lista in ranking.items() if lista %}
+  <div class="card sport-card">
+    <div class="card-header sport-header d-flex justify-content-between align-items-center"
+         data-bs-toggle="collapse" data-bs-target="#c{{ loop.index }}">
+      <h3 class="mb-0">{{ deporte }}</h3>
+      <span class="badge bg-secondary">Desplegable</span>
+    </div>
+
+    <div id="c{{ loop.index }}" class="collapse show">
+      <div class="card-body">
+        <table id="t{{ loop.index }}" class="table table-dark table-striped table-hover nowrap" style="width:100%">
+          <thead class="table-primary text-center align-middle">
+            <tr>
+              <th>#</th><th>Nombre</th><th>Edad</th>
+              {% if deporte in ['NBA','Fútbol'] %}<th>Dorsal</th>{% endif %}
+
+              {% if deporte=='Atletismo' %}
+                <th title="Prueba">🏃</th>
+                <th title="Marca">⏱️</th>
+              {% endif %}
+
+              {% if deporte=='Fútbol' %}
+                <th title="Goles">⚽</th>
+                <th title="Asistencias">🅰️</th>
+                <th title="G+A">➕ G/A</th>
+                <th title="Minutos">⏱️</th>
+                <th title="Amarillas">🟨</th>
+                <th title="Rojas">🟥</th>
+              {% endif %}
+
+              {% if deporte=='NBA' %}
+                <th title="Puntos">🏀 PTS</th>
+                <th title="Rebotes">⛹️ REB</th>
+                <th title="Asist.">🎯 AST</th>
+                <th title="Minutos">⏱️ MIN</th>
+              {% endif %}
+
+              {% if deporte=='Fórmula 1' %}
+                <th title="Mundiales">🏆</th>
+                <th title="Podios">🏁</th>
+                <th title="Pts carrera">⚡PTS</th>
+              {% endif %}
+
+              {% if deporte=='MMA' %}
+                <th title="Altura">↕️</th>
+                <th title="Peso">⚖️</th>
+                <th title="Reach">📏</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody class="text-center align-middle">
+              {% for p in lista %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td class="text-start">{{ p.DatosPersonales.name }}</td>
+                  <td>{{ p.rank.edad }}</td>
+
+              {% if deporte in ['NBA','Fútbol'] %}
+                <td>{{ p.DeporteYHabilidades.jersey or '-' }}</td>
+              {% endif %}
+
+              {% if deporte == 'Atletismo' %}
+                <td>{{ p.rank.prueba }}</td>
+                <td>{{ p.rank.marca }}</td>
+              {% endif %}
+
+              {% if deporte == 'Fútbol' %}
+                <td>{{ p.rank.goles|default('—') }}</td>
+                <td>{{ p.rank.asis|default('—') }}</td>
+                <td>{{ p.rank.ga|default('—') }}</td>
+                <td>{{ p.rank.min|default('—') }}</td>
+                <td>{{ p.rank.yellow|default('—') }}</td>
+                <td>{{ p.rank.red|default('—') }}</td>
+              {% endif %}
+
+              {% if deporte == 'NBA' %}
+                <td>{{ p.rank.pts|default('—') }}</td>
+                <td>{{ p.rank.reb|default('—') }}</td>
+                <td>{{ p.rank.ast|default('—') }}</td>
+                <td>{{ p.rank.min }}</td>
+              {% endif %}
+
+              {% if deporte == 'Fórmula 1' %}
+                <td>{{ p.rank.mund|default('—') }}</td>
+                <td>{{ p.rank.pod|default('—') }}</td>
+                <td>{{ p.rank.pts|default('—') }}</td>
+              {% endif %}
+
+              {% if deporte == 'MMA' %}
+                <td>{{ p.rank.altura|default('—') }}</td>
+                <td>{{ p.rank.peso|default('—') }}</td>
+                <td>{{ p.rank.reach|default('—') }}</td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+ {{ super() }}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  $('table').each(function(){
+    $(this).DataTable({
+      responsive:true,
+      paging:false,
+      info:false,
+      order:[[2,'desc']],
+      columnDefs:[{orderable:false,targets:0}]
+    });
+  });
+});
+</script>
+{% endblock %}

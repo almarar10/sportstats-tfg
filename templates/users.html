@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="mb-4">Listado de deportistas</h1>
+
+{# Recorremos todos los índices de SPORTS_LIST #}
+{% for idx in range(sports|length) %}
+  {# Filtramos los jugadores que pertenecen a este deporte #}
+  {% set group = players 
+       | selectattr("DeporteYHabilidades.sport", "equalto", idx|string)
+       | list %}
+  {% if group %}
+    {# → Cabecera clicable que activa el collapse para este deporte #}
+    <h4 class="text-info mt-4 border-bottom pb-1"
+        role="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#sport{{ idx }}"
+        aria-expanded="false"
+        aria-controls="sport{{ idx }}">
+      {{ sports[idx] }}
+      <i data-lucide="chevron-down" class="ms-1"></i>
+    </h4>
+
+    {# → Contenedor colapsable #}
+    <div id="sport{{ idx }}" class="collapse">
+      <div class="row g-4">
+        {% for p in group %}
+          {% set pid = p.DatosPersonales.id %}
+          <div class="col-md-6 col-lg-4" id="player-card-{{ pid }}">
+            <div class="card h-100 shadow-sm player-card position-relative">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title mb-1">{{ p.DatosPersonales.name }}</h5>
+                <small class="text-secondary d-block mb-2">
+                  {{ sports[idx] }}
+                </small>
+
+                <p class="flex-grow-1 small">
+                  Edad <b>{{ p.DatosPersonales.age }}</b><br>
+                  {% if p.DeporteYHabilidades.Position %}
+                    Posición <b>{{ p.DeporteYHabilidades.Position }}</b>
+                  {% endif %}
+                </p>
+
+                <a href="{{ url_for('player_detail', pid=pid) }}"
+                   class="btn btn-sm btn-primary w-100 mb-2">
+                  Ver detalle
+                </a>
+
+                <a href="{{ url_for('edit_player', pid=pid) }}"
+                   class="btn btn-sm btn-outline-info w-100 mb-2">
+                  Editar
+                </a>
+
+                <button class="btn btn-sm btn-outline-danger w-100"
+                        data-bs-toggle="modal" data-bs-target="#del{{ pid }}">
+                  <i data-lucide="x" class="me-1"></i> Eliminar
+                </button>
+              </div>
+
+              <!-- Modal confirmación -->
+              <div class="modal fade" id="del{{ pid }}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content bg-dark">
+                    <div class="modal-header border-0">
+                      <h5 class="modal-title text-danger">
+                        ¿Eliminar deportista?
+                      </h5>
+                      <button class="btn-close btn-close-white" 
+                              data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                      ¿Seguro que quieres eliminar a 
+                      <b>{{ p.DatosPersonales.name }}</b>?
+                    </div>
+                    <div class="modal-footer border-0">
+                      <button type="button"
+                              class="btn btn-success btn-confirm-delete"
+                              data-pid="{{ pid }}"
+                              data-bs-dismiss="modal">
+                        Sí
+                      </button>
+                      <button class="btn btn-danger" 
+                              data-bs-dismiss="modal">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /Modal -->
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {# Fin collapse #}
+  {% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar iconos Lucide (chevron-down)
+    lucide.createIcons();
+
+    // Botones de “Eliminar deportista”
+    document.querySelectorAll('.btn-confirm-delete').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const pid = btn.dataset.pid;
+        try {
+          const resp = await fetch(`/player/${pid}/delete`, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+          });
+          if (!resp.ok) throw new Error('Error al eliminar');
+          document.getElementById(`player-card-${pid}`)?.remove();
+        } catch (e) {
+          console.error(e);
+          alert('No se pudo eliminar el deportista.');
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}

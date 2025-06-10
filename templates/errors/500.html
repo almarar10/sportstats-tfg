@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<section class="text-center py-5">
+  <h1 class="display-3 fw-bold text-warning">500</h1>
+  <p class="lead mb-4">Ha ocurrido un error inesperado.<br>Estamos trabajando en ello.</p>
+  <a href="{{ url_for('index') }}" class="btn btn-outline-light">
+    <i data-lucide="rotate-ccw"></i> Intentar de nuevo
+  </a>
+</section>
+{% endblock %}

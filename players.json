@@ -1,0 +1,520 @@
+[
+    {
+        "DatosPersonales": {
+            "id": "001",
+            "name": "Armand Duplantis",
+            "FirstName": "Armand",
+            "LastName": "Duplantis",
+            "Gender": "Masculino",
+            "placeofbirth": "Lafayette, Louisiana (EE. UU.)",
+            "bio": "Plusmarquista mundial de salto con pértiga (6,23 m). Atleta sueco-estadounidense, campeón olímpico y mundial.",
+            "about": "Conocido como “Mondo”, domina la pértiga desde categorías inferiores; entrena con su padre Greg Duplantis.",
+            "age": 25
+        },
+        "DeporteYHabilidades": {
+            "sport": "0",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "potencia",
+                "velocidad",
+                "técnica"
+            ],
+            "Position": "Salto con pértiga",
+            "Side": "",
+            "SportSituation": "",
+            "StartPlayer": "",
+            "athlete_id": "14679502"
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "002",
+            "name": "Vinícius Júnior",
+            "FirstName": "Vinícius",
+            "LastName": "Júnior",
+            "Gender": "Masculino",
+            "placeofbirth": "São Gonçalo, Brasil",
+            "bio": "Extremo brasileño del Real Madrid y de la selección de Brasil.",
+            "about": "Conocido por su velocidad explosiva y desequilibrio. Ha sido decisivo en finales de Champions League y LaLiga.",
+            "age": 23
+        },
+        "DeporteYHabilidades": {
+            "sport": "2",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "regate",
+                "velocidad",
+                "creatividad"
+            ],
+            "Position": "Extremo izquierdo",
+            "Side": "Derecho",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": "",
+            "jersey": "7"
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "008",
+            "name": "Kylian Mbappe",
+            "FirstName": "Kylian",
+            "LastName": "Mbappe",
+            "Gender": "Masculino",
+            "placeofbirth": "Bondy, Paris",
+            "bio": "Kylian Mbappé Lottin (n. 20 de diciembre de 1998, Bondy, Francia) es un futbolista francés que juega como delantero en el Paris Saint-Germain y en la selección de Francia. Debutó profesionalmente con el AS Mónaco en 2015 y conquistó la Ligue 1 en 2017. Ese mismo año fue nombrado Mejor Jugador Joven de la Champions League. En 2018, con 19 años, se proclamó Campeón del Mundo con Francia en Rusia, convirtiéndose en el segundo adolescente en ganar un Mundial (tras Pelé).",
+            "about": "Club actual: Paris Saint-Germain (desde 2017)\r\n\r\nSelección: Francia (desde 2017)\r\n\r\nPosición: Delantero – destaca por su velocidad explosiva y definición clínica\r\n\r\nPremios destacados:\r\n\r\nMejor Jugador Joven en Copa del Mundo 2018\r\n\r\nMáximo goleador de la Ligue 1 (varias temporadas)\r\n\r\nMedalla de la Legión de Honor de Francia (2018)\r\n\r\nEstilo de juego: Combina regate incisivo, potencia física y visión de gol; letal tanto en contragolpe como en espacios cerrados.",
+            "age": 25
+        },
+        "DeporteYHabilidades": {
+            "sport": "2",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "potencia",
+                "goleador",
+                "agilidad",
+                "olfato"
+            ],
+            "Position": "Delantero",
+            "Side": "Diestro",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": "",
+            "jersey": "9"
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "124",
+            "name": "Stephen Curry",
+            "FirstName": "Stephen",
+            "LastName": "Curry",
+            "Gender": "Masculino",
+            "placeofbirth": "Ohio, EEUU.",
+            "bio": "Stephen Curry es un jugador profesional de baloncesto estadounidense, base de los Golden State Warriors, reconocido por revolucionar el juego con su excepcional tiro de tres puntos.",
+            "about": "Considerado uno de los mejores tiradores de la historia, Curry ha ganado múltiples anillos de la NBA y premios MVP, transformando la forma en que se juega el baloncesto moderno.",
+            "age": 37
+        },
+        "DeporteYHabilidades": {
+            "sport": "1",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "tiro",
+                "inteligencia",
+                "agilidad",
+                "manejo del balón"
+            ],
+            "Position": "Base",
+            "Side": "Diestro",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": "124",
+            "jersey": "30",
+            "games": [
+                {
+                    "season": 2023,
+                    "game_id": 13717,
+                    "min": 36,
+                    "pts": 22,
+                    "reb": 7,
+                    "ast": 7
+                },
+                {
+                    "season": 2023,
+                    "game_id": 13337,
+                    "min": 35,
+                    "pts": 41,
+                    "reb": 4,
+                    "ast": 5
+                },
+                {
+                    "season": 2023,
+                    "game_id": 13936,
+                    "min": 36,
+                    "pts": 22,
+                    "reb": 4,
+                    "ast": 2
+                }
+            ]
+        },
+        "season": 2023,
+        "game_id": 13936
+    },
+    {
+        "DatosPersonales": {
+            "id": "004",
+            "name": "Enrique Llopis",
+            "FirstName": "Enrique",
+            "LastName": "Llopis",
+            "Gender": "Masculino",
+            "placeofbirth": "Valencia",
+            "bio": "Enrique Llopis Doménech (nacido el 15 de octubre de 2000 en Bellreguard, Valencia) es un atleta español especializado en los 110 y 60 metros vallas. Ha sido medallista en campeonatos europeos y finalista olímpico, destacando por su velocidad y técnica en las vallas.",
+            "about": "Llopis comenzó en el fútbol, pero lo dejó debido al ambiente negativo en las gradas. Se enfocó en el atletismo, influenciado por su amigo Luis Salort. Desde su debut internacional en 2019, ha mostrado una progresión constante, superando obstáculos como una grave caída en la final del Europeo de 2023 en Estambul. Su resiliencia lo ha consolidado como uno de los mejores vallistas de Europa.",
+            "age": 24
+        },
+        "DeporteYHabilidades": {
+            "sport": "0",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "veloz"
+            ],
+            "Position": "110 metros vallas",
+            "Side": "",
+            "SportSituation": "",
+            "StartPlayer": "",
+            "athlete_id": "14711683",
+            "jersey": "",
+            "games": []
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "006",
+            "name": "Fernando Alonso",
+            "FirstName": "Fernando",
+            "LastName": "Alonso",
+            "Gender": "Masculino",
+            "placeofbirth": "Oviedo, España",
+            "bio": "Fernando Alonso (Oviedo, 1981) es un piloto español de Fórmula 1 bicampeón mundial (2005, 2006) con Renault. Debutó en la F1 en 2001 y ha corrido para Minardi, McLaren, Ferrari, Alpine y Aston Martin.",
+            "about": "Estilo: Gran gestión de neumáticos y capacidad de remontada.\r\nExtras: Participó en Le Mans e Indy 500, buscando la “Triple Corona”.",
+            "age": 43
+        },
+        "DeporteYHabilidades": {
+            "sport": "3",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "velocidad",
+                "experiencia",
+                "conduccion"
+            ],
+            "Position": "Driver",
+            "Side": "",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": ""
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "012",
+            "name": "Max Verstappen",
+            "FirstName": "Max",
+            "LastName": "Verstappen",
+            "Gender": "Masculino",
+            "placeofbirth": "Holanda",
+            "bio": "Max Verstappen, nacido el 30 de septiembre de 1997 en Hasselt, Bélgica, es un piloto neerlandés de Fórmula 1. Debutó en 2015 y se convirtió en el campeón mundial más joven de la historia en 2021. Corre para Red Bull Racing.",
+            "about": "Hijo del expiloto Jos Verstappen, Max es conocido por su madurez competitiva, su estilo agresivo y su capacidad para dominar bajo presión. Ha redefinido la era moderna de la F1.",
+            "age": 24
+        },
+        "DeporteYHabilidades": {
+            "sport": "3",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "control del monoplaza en condiciones extremas",
+                "agresividad estratégica en adelantamientos",
+                "consistencia en ritmo de carrera."
+            ],
+            "Position": "Driver",
+            "Side": "",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": ""
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "015",
+            "name": "Ilia Topuria",
+            "FirstName": "Ilia",
+            "LastName": "Topuria",
+            "Gender": "Masculino",
+            "placeofbirth": "Halle, Alemania",
+            "bio": "Ilia Topuria Bendeliani, nacido el 21 de enero de 1997 en Halle, Alemania, de padres georgianos, se trasladó a Georgia a los 7 años y luego a Alicante, España, a los 15. Comenzó su carrera profesional en 2015 y ha sido campeón de peso pluma de la UFC.",
+            "about": "Apodado \"El Matador\", Topuria es una figura destacada en las MMA, conocido por su confianza y ambición. Actualmente, se prepara para enfrentar a Charles Oliveira por el título vacante de peso ligero en UFC 317, el 28 de junio de 2025, en Las Vegas.",
+            "age": 28
+        },
+        "DeporteYHabilidades": {
+            "sport": "4",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "Boxeo potente y preciso",
+                "Jiu-Jitsu brasileño",
+                "Invicto Profesional"
+            ],
+            "Position": "Peso Ligero",
+            "Side": "Diestro",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": ""
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "055",
+            "name": "Carlos Sainz Jr",
+            "FirstName": "Carlos",
+            "LastName": "Sainz",
+            "Gender": "Masculino",
+            "placeofbirth": "Madrid, España",
+            "bio": "Carlos Sainz Jr., nacido en Madrid en 1994, es un piloto español de Fórmula 1. Debutó en 2015 y ha corrido para equipos como Toro Rosso, McLaren, Ferrari y Williams.",
+            "about": "Apodado \"Smooth Operator\", hijo del campeón de rally Carlos Sainz, destaca por su consistencia, liderazgo y capacidad técnica en pista.",
+            "age": 30
+        },
+        "DeporteYHabilidades": {
+            "sport": "3",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "velocidad",
+                "agilidad",
+                "buen trato de neumaticos"
+            ],
+            "Position": "Driver",
+            "Side": "",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": ""
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "14755064",
+            "name": "Alison Dos Santos",
+            "FirstName": "Alison",
+            "LastName": "Dos Santos",
+            "Gender": "Masculino",
+            "placeofbirth": "São Paulo, Brasil.",
+            "bio": "Alison Brendom Alves dos Santos, conocido como \"Piu\", es un atleta brasileño nacido el 3 de junio de 2000. Especialista en los 400 metros con vallas, ha obtenido medallas de bronce en los Juegos Olímpicos de Tokio 2020 y París 2024, y se coronó campeón mundial en 2022 con un tiempo de 46.29 segundos, estableciendo récords sudamericano y panamericano.",
+            "about": "Desde temprana edad, Alison superó desafíos personales, incluyendo quemaduras sufridas en la infancia. Su dedicación y pasión por el atletismo lo han convertido en uno de los mejores vallistas del mundo, destacándose por su carisma y determinación en la pista.",
+            "age": 24
+        },
+        "DeporteYHabilidades": {
+            "sport": "0",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "velocidad explosiva",
+                "técnica depurada en vallas",
+                "resistencia física"
+            ],
+            "Position": "400 metros con vallas",
+            "Side": "",
+            "SportSituation": "",
+            "StartPlayer": "",
+            "athlete_id": "14755064"
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "077",
+            "name": "Luka Doncic",
+            "FirstName": "Luka",
+            "LastName": "Doncic",
+            "Gender": "Masculino",
+            "placeofbirth": "Ljubljana, Eslovenia",
+            "bio": "Base-escolta esloveno que debutó profesionalmente con el Real Madrid a los 16 años. Actualmente juega en Los Angeles Lakers y es considerado uno de los mejores talentos europeos en la NBA.",
+            "about": "\"Luka Magic\", destaca por su inteligencia en la cancha y su capacidad para liderar equipos desde joven.",
+            "age": 25
+        },
+        "DeporteYHabilidades": {
+            "sport": "1",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "visión de juego",
+                "tiro exterior",
+                "control del ritmo"
+            ],
+            "Position": "Base",
+            "Side": "Diestro",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": "963",
+            "jersey": "77",
+            "games": [
+                {
+                    "season": 2023,
+                    "game_id": 14008,
+                    "min": 41,
+                    "pts": 29,
+                    "reb": 10,
+                    "ast": 7
+                },
+                {
+                    "season": 2023,
+                    "game_id": 14007,
+                    "min": 41,
+                    "pts": 19,
+                    "reb": 6,
+                    "ast": 9
+                },
+                {
+                    "season": 2023,
+                    "game_id": 14033,
+                    "min": 37,
+                    "pts": 36,
+                    "reb": 10,
+                    "ast": 5
+                }
+            ]
+        },
+        "season": 2023,
+        "game_id": 14033
+    },
+    {
+        "DatosPersonales": {
+            "id": "023",
+            "name": "LeBron James",
+            "FirstName": "LeBron",
+            "LastName": "James",
+            "Gender": "Masculino",
+            "placeofbirth": "Akron, Ohio, EE. UU.",
+            "bio": "Alero estadounidense con una carrera legendaria en la NBA, ha ganado múltiples campeonatos y es reconocido por su impacto dentro y fuera de la cancha.",
+            "about": "Conocido como \"King James\", es una figura influyente en el deporte y la sociedad, destacando por su longevidad y compromiso social.",
+            "age": 40
+        },
+        "DeporteYHabilidades": {
+            "sport": "1",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "versatilidad",
+                "liderazgo",
+                "capacidad atlética"
+            ],
+            "Position": "Alero",
+            "Side": "Diestro",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": "265",
+            "jersey": "23",
+            "games": [
+                {
+                    "season": 2023,
+                    "game_id": 13153,
+                    "min": 31,
+                    "pts": 28,
+                    "reb": 5,
+                    "ast": 5
+                },
+                {
+                    "season": 2023,
+                    "game_id": 13404,
+                    "min": 39,
+                    "pts": 31,
+                    "reb": 4,
+                    "ast": 6
+                },
+                {
+                    "season": 2023,
+                    "game_id": 13295,
+                    "min": 38,
+                    "pts": 21,
+                    "reb": 4,
+                    "ast": 14
+                }
+            ]
+        },
+        "season": 2023,
+        "game_id": 13295
+    },
+    {
+        "DatosPersonales": {
+            "id": "0809",
+            "name": "Conor McGregor",
+            "FirstName": "Conor",
+            "LastName": "McGregor",
+            "Gender": "Masculino",
+            "placeofbirth": "Dublín, Irlanda",
+            "bio": "Luchador irlandés de artes marciales mixtas, fue el primer peleador en la historia de la UFC en ostentar títulos en dos categorías de peso simultáneamente.",
+            "about": "Apodado \"The Notorious\", es conocido por su estilo agresivo y su habilidad para promocionar sus combates.",
+            "age": 36
+        },
+        "DeporteYHabilidades": {
+            "sport": "4",
+            "sportLevel": "Profesional",
+            "sportIndexList": [
+                "potencia de golpeo",
+                "carisma",
+                "precisión en el boxeo"
+            ],
+            "Position": "Peso Ligero",
+            "Side": "Diestro",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": ""
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "0987",
+            "name": "Khabib Nurmagomedov",
+            "FirstName": "Khabib",
+            "LastName": "Nurmagomedov",
+            "Gender": "Masculino",
+            "placeofbirth": "Sildi, Daguestán, Rusia",
+            "bio": "Exluchador ruso de artes marciales mixtas, se retiró invicto con un récord de 29-0 y fue campeón mundial de peso ligero de la UFC.",
+            "about": "Conocido como \"The Eagle\", es respetado por su disciplina y dominio en la lucha, siendo considerado uno de los mejores en la historia de las MMA",
+            "age": 36
+        },
+        "DeporteYHabilidades": {
+            "sport": "4",
+            "sportLevel": "Retirado",
+            "sportIndexList": [
+                "lucha",
+                "control en el suelo",
+                "resistencia"
+            ],
+            "Position": "Artes Marciales Mixtas",
+            "Side": "Diestro",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": ""
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "405",
+            "name": "Robert Lewandowski",
+            "FirstName": "Robert",
+            "LastName": "Lewandowski",
+            "Gender": "Masculino",
+            "placeofbirth": "",
+            "bio": "",
+            "about": "",
+            "age": 36
+        },
+        "DeporteYHabilidades": {
+            "sport": "2",
+            "sportLevel": "",
+            "sportIndexList": [],
+            "Position": "Delantero centro",
+            "Side": "",
+            "SportSituation": "",
+            "StartPlayer": "",
+            "athlete_id": "",
+            "jersey": ""
+        }
+    },
+    {
+        "DatosPersonales": {
+            "id": "14755065",
+            "name": "Toni Kroos",
+            "FirstName": "Toni",
+            "LastName": "Kroos",
+            "Gender": "Masculino",
+            "placeofbirth": "Alemania",
+            "bio": "",
+            "about": "",
+            "age": 33
+        },
+        "DeporteYHabilidades": {
+            "sport": "2",
+            "sportLevel": "Retirado :(",
+            "sportIndexList": [],
+            "Position": "Mediocentro",
+            "Side": "Diestro",
+            "SportSituation": "",
+            "StartPlayer": "Sí",
+            "athlete_id": "",
+            "jersey": "8",
+            "games": []
+        }
+    }
+]

@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+{% block head %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .form-card {
+      max-width: 400px;
+      margin: 8vh auto;
+      padding: 2rem;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.05);
+      border-radius: 1rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,.4);
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Crear nueva cuenta</h1>
+
+<form method="post" class="row g-3 needs-validation" novalidate>
+  {{ form.hidden_tag() }}
+
+  <div class="col-md-6">
+    {{ form.username.label(class="form-label") }}
+    {{ form.username(class="form-control", placeholder="Usuario") }}
+    {% for err in form.username.errors %}
+      <div class="invalid-feedback d-block">{{ err }}</div>
+    {% endfor %}
+  </div>
+
+  <div class="col-md-6">
+    {{ form.email.label(class="form-label") }}
+    {{ form.email(class="form-control", placeholder="Correo electrónico") }}
+    {% for err in form.email.errors %}
+      <div class="invalid-feedback d-block">{{ err }}</div>
+    {% endfor %}
+  </div>
+
+  <div class="col-md-6">
+    {{ form.password.label(class="form-label") }}
+    {{ form.password(class="form-control", placeholder="Contraseña") }}
+    {% for err in form.password.errors %}
+      <div class="invalid-feedback d-block">{{ err }}</div>
+    {% endfor %}
+  </div>
+
+  <div class="col-md-6">
+    {{ form.confirm.label(class="form-label") }}
+    {{ form.confirm(class="form-control", placeholder="Repite la contraseña") }}
+    {% for err in form.confirm.errors %}
+      <div class="invalid-feedback d-block">{{ err }}</div>
+    {% endfor %}
+  </div>
+
+  <div class="col-md-6">
+    {{ form.fav_sport.label(class="form-label") }}
+    {{ form.fav_sport(class="form-select") }}
+    {% for err in form.fav_sport.errors %}
+      <div class="invalid-feedback d-block">{{ err }}</div>
+    {% endfor %}
+  </div>
+
+  <div class="col-12 text-end mt-3">
+    {{ form.submit(class="btn btn-primary") }}
+    <a href="{{ url_for('login') }}" class="btn btn-secondary">Volver al login</a>
+  </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.254.0/dist/lucide.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Inicializa los iconos
+      lucide.createIcons();
+
+      // Toggle de visibilidad de contraseña
+      document.querySelectorAll('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const input = btn.closest('.input-group').querySelector('input');
+          const icon  = btn.querySelector('i');
+          if (input.type === 'password') {
+            input.type = 'text';
+            icon.setAttribute('data-feather', 'eye');
+          } else {
+            input.type = 'password';
+            icon.setAttribute('data-feather', 'eye-off');
+          }
+          lucide.createIcons();
+        });
+      });
+    });
+  </script>
+{% endblock %}

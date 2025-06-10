@@ -1,0 +1,12 @@
+<!-- templates/search.html -->
+{% extends "layout.html" %}
+{% block content %}
+<h1>Buscar Deportista</h1>
+<form method="get" action="{{ url_for('player_info') }}">
+  <div class="mb-3">
+    <label for="name" class="form-label">Nombre del Deportista</label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="Ingresa el nombre del deportista" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+{% endblock %}

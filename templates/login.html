@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+{% block head %}
+<style>
+  .login-card{
+    max-width:380px;
+    margin:8vh auto;
+    padding:2.5rem 2rem;
+    border-radius:1rem;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.05);
+    box-shadow:0 4px 18px rgba(0,0,0,.4);
+  }
+  .login-card .brand{
+    width:200px; height:200px;
+    display:block; margin:0 auto 1rem auto;
+    object-fit:contain;
+  }
+  #login-btn.ok  {background:#34c759!important;border-color:#34c759!important}
+  #login-btn.fail{background:#dc3545!important;border-color:#dc3545!important}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-card text-center">
+  <img src="{{ url_for('static', filename='img/logo.png') }}"
+       class="brand" alt="logo">
+
+  <form id="login-form" method="post" action="{{ url_for('login') }}">
+    <!-- usuario -->
+    <div class="input-group mb-3">
+      <span class="input-group-text bg-secondary">
+        <i data-lucide="user"></i>
+      </span>
+      <input name="username" class="form-control" placeholder="Usuario" required>
+    </div>
+
+    <!-- contraseña con ojo para mostrar/ocultar -->
+    <div class="input-group mb-4">
+      <span class="input-group-text bg-secondary">
+        <i data-lucide="key"></i>
+      </span>
+      <input id="password" name="password" type="password" class="form-control"
+             placeholder="Contraseña" required>
+      <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+        <i data-lucide="eye"></i>
+      </button>
+    </div>
+
+    <button id="login-btn" class="btn btn-primary w-100 py-2 mb-3" type="submit">
+      LOGIN
+    </button>
+  </form>
+
+  <p class="mb-2">¿No tienes cuenta? Créate una</p>
+  <a href="{{ url_for('register_user') }}"
+     class="btn btn-outline-light w-100">
+    Crear cuenta
+  </a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/lucide/dist/lucide.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+
+  // toggle show/hide password
+  const toggle = document.getElementById('togglePassword');
+  const pwd    = document.getElementById('password');
+  toggle.addEventListener('click', () => {
+    const icon = toggle.querySelector('i');
+    if (pwd.type === 'password') {
+      pwd.type = 'text';
+      icon.dataset.lucide = 'eye-off';
+    } else {
+      pwd.type = 'password';
+      icon.dataset.lucide = 'eye';
+    }
+    lucide.createIcons();
+  });
+
+  // --- existente handler login AJAX ---
+  const form = document.getElementById('login-form');
+  const btn  = document.getElementById('login-btn');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+    const data = new URLSearchParams(new FormData(form));
+    fetch(form.action, { method:'POST', body:data })
+      .then(r => {
+        if (r.redirected) {
+          btn.classList.add('ok');
+          btn.innerHTML = '<i data-lucide="check"></i>';
+          lucide.createIcons();
+          setTimeout(() => location = r.url, 400);
+        } else if (r.status === 401) {
+          throw new Error('Credenciales incorrectas');
+        } else {
+          return r.text().then(t => { throw new Error(t||r.statusText); });
+        }
+      })
+      .catch(err => {
+        btn.classList.add('fail');
+        btn.innerHTML = '<i data-lucide="x"></i>';
+        lucide.createIcons();
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.classList.remove('fail');
+          btn.textContent = 'LOGIN';
+          alert(err.message);
+        }, 2000);
+      });
+  });
+});
+</script>
+{% endblock %}

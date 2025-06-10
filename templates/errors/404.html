@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<section class="text-center py-5">
+  <h1 class="display-3 fw-bold text-danger">404</h1>
+  <p class="lead mb-4">Ups… página no encontrada.</p>
+  <a href="{{ url_for('index') }}" class="btn btn-primary">
+    <i data-lucide="home"></i> Volver al inicio
+  </a>
+</section>
+{% endblock %}

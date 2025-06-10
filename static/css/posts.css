@@ -1,0 +1,202 @@
+/* ─── Layout general ─────────────────────────────────────────────────────────── */
+.feed-wrapper {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* ─── Barra izquierda ───────────────────────────────────────────────────────── */
+.left-bar {
+  width: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-box {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.user-box .sport-emoji {
+  font-size: 2rem;
+}
+.user-box .user-handle {
+  color: #ccc;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* ─── Columna central ───────────────────────────────────────────────────────── */
+.center-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ─── Composer ─────────────────────────────────────────────────────────────── */
+.composer {
+  background: #1e2228;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.composer textarea {
+  width: 100%;
+  background: #181b20;
+  border: 1px solid #333;
+  border-radius: 0.5rem;
+  color: #eee;
+  padding: 0.75rem;
+  resize: vertical;
+  min-height: 4rem;
+}
+
+.composer-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  background-color: #1d9bf0;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ─── Cada post ─────────────────────────────────────────────────────────────── */
+.post-card {
+  background: #1e2228;
+  border-radius: 0.75rem;      /* bordes redondeados */
+  padding: 1rem;
+  margin-bottom: 1rem;         /* separación entre posts */
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Header: emoji+handle + fecha */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-header .user-ident {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.post-header .user-ident .sport-emoji {
+  font-size: 1.5rem;
+}
+
+.post-header .user-ident .user-handle {
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Fecha/hora del post: mismo estilo que “Este post ha sido editado” */
+.post-time,
+.edited-label {
+  color: #777;
+  font-size: 0.75rem;
+}
+
+/* Cuerpo del post */
+.post-content {
+  color: #ddd;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+/* Footer: corazón + contador + edit/delete */
+.post-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.post-footer .like-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #888;            /* color outline por defecto */
+}
+
+.post-footer .like-btn.liked {
+  color: #f4212e;         /* rojo cuando está liked */
+}
+
+.post-footer .actions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.post-footer .edit-btn,
+.post-footer .delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+/* Etiqueta “Este post ha sido editado” */
+.edited-label {
+  margin-left: 1.5rem;
+}
+
+/* Separator */
+.post-separator {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 0.5rem 0;
+}
+
+/* Cargar más */
+.btn-secondary.full-width {
+  background: none;
+  border: 1px solid #444;
+  color: #ccc;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.posts-tabs {
+  display: flex;
+  border-bottom: 1px solid #333;
+  margin-bottom: 0.5rem;
+}
+.posts-tabs .tab {
+  flex: 1;
+  padding: 0.75rem;
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-weight: bold;
+}
+.posts-tabs .tab.active {
+  color: #fff;
+  border-bottom: 2px solid #1d9bf0;
+}
+
