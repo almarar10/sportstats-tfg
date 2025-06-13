@@ -1,138 +1,186 @@
-**SportStats 🏟️ | Estadísticas + Microblogging en un solo lugar**
+# SportStats 🏟️ | Real‑Time Sports Data & Microblogging in One Place
 
-**SportStats** es una plataforma web que combina, en tiempo real, datos deportivos detallados (extraídos vía API‑SPORTS o scraping de World Athletics) con un micro‑feed al estilo X/Twitter. Incluye:
-
-* **Motor de recomendación** basado en TF‑IDF + k‑NN
-* **Catálogo semilla** de deportistas pre‑cargados
-* **Interfaz responsive** con Bootstrap 5 y Lucide Icons
-* **Publicación optimista** (optimistic UI), edición inline y likes
+**SportStats** is an open‑source Flask web application that seamlessly integrates real‑time sports statistics (via API‑SPORTS or World Athletics scraping) with a Twitter‑style micro‑feed. Built with modular blueprints, Redis caching, and a TF‑IDF + k‑NN recommendation engine, SportStats delivers a performant, responsive experience for fans and analysts alike.
 
 ---
 
-## ✨ Características principales
+## ✨ Core Features
 
-| Área                | Funcionalidad                                                                                       |
-| ------------------- | --------------------------------------------------------------------------------------------------- |
-| **Autenticación**   | Registro/login con email único, contraseñas hash bcrypt, sesión gestionada con Flask‑Login.         |
-| **Catálogo**        | `/precharge`: elenco pre‑cargado (players) con ⭐ para añadir a favoritos (`players.json`).          |
-| **Gestión manual**  | Formulario WTForms para dar de alta/deportistas; campos dinámicos (athlete\_id, jersey, posición…). |
-| **Estadísticas**    | Wrappers en `basket_api.py`, `football_api.py`, `wa_scraper.py`, `formula1_api.py`, `mma_api.py`.   |
-| **Micro‑feed**      | Composer, optimistc UI, AJAX para likes, paginación «Cargar más» (`/api/posts`).                    |
-| **Recomendaciones** | `train_recommender.py` entrena TF‑IDF + k‑NN; modelo en `recommender_model.joblib`.                 |
-| **Errores**         | Plantillas personalizadas en `templates/errors/404.html` y `500.html`.                              |
+| Component           | Description                                                                                                                                                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Authentication**  | Secure registration & login (unique email), Flask‑Login sessions, bcrypt‑hashed passwords.                                                                 |
+| **Athlete Catalog** | `/precharge` seeds athletes with “⭐” favorites; dynamic manual entry form with WTForms.                                                                    |
+| **Statistics API**  | Service wrappers:                                                                                                                                          |
+|                     | • `basket_api.py` (NBA, API‑Sports)                                                                                                                        |
+|                     | • `football_api.py` (Football, API‑Sports)                                                                                                                 |
+|                     | • `wa_scraper.py` (Track & Field, World Athletics)                                                                                                         |
+|                     | • `formula1_api.py` (F1, API‑Sports)                                                                                                                       |
+|                     | • `mma_api.py` (MMA, API‑Sports)                                                                                                                           |
+| **Micro‑Feed**      | Composer with optimistic UI (draft & replay), inline edit/delete, AJAX likes & pagination.                                                                 |
+| **Recommendations** | Offline training script (`train_recommender.py`): Spanish stop‑words TF‑IDF → k‑NN via `NearestNeighbors`; model serialized in `recommender_model.joblib`. |
+| **Caching**         | Redis for API response caching (15‑min TTL) + local disk cache with TTL for HTTP calls.                                                                    |
+| **Error Handling**  | Custom 404/500 templates; API error fallbacks with degraded UI indicators.                                                                                 |
 
 ---
 
-## 🏗️ Estructura del proyecto
+## 📐 Architecture & Diagrams
 
-```
+1. **High‑Level Architecture**
+
+   ```mermaid
+   flowchart LR
+     Client-->Nginx/Gunicorn-->Flask App
+     Flask App-->Blueprints
+     subgraph Services
+       DB[(MySQL)]
+       Redis(Cache)
+       FAISS[Index]
+       API_Sports
+       WorldAthletics
+     end
+     Flask App-->DB
+     Flask App-->Redis
+     Flask App-->FAISS
+     Flask App-->API_Sports
+     Flask App-->WorldAthletics
+   ```
+
+2. **Data Model (ER Diagram)**
+
+   ```mermaid
+   erDiagram
+     users ||--o{ posts : creates
+     users ||--o{ likes : gives
+     posts ||--o{ likes : receives
+     users {
+       int id PK
+       string username
+       string email
+       string pw_hash
+       int fav_sport
+     }
+     posts {
+       int id PK
+       int author_id FK
+       string content
+       int like_count
+       bool edited
+     }
+     likes {
+       int id PK
+       int user_id FK
+       int post_id FK
+     }
+   ```
+
+3. **Recommendation Pipeline**
+
+   * **Data Extraction:**   SQLAlchemy → pandas DataFrame
+   * **Preprocessing:**     NLTK Spanish stop‑words, lowercase, tokenizer
+   * **Vectorization:**     `TfidfVectorizer(max_features=5000)`
+   * **Indexing:**          `NearestNeighbors(metric='cosine', algorithm='brute')`
+   * **Runtime Query:**     Average liked vectors + fav\_sport embedding → k‑NN search → filter out own/liked posts.
+
+---
+
+## 🏗️ Project Structure
+
+```text
 RmTop/
-├── app.py               # Punto de entrada: Flask, blueprints, rutas y servidor
-├── .env                 # Configuración sensible (SECRET_KEY, API_KEYS, MySQL)
-├── requirements.txt     # Dependencias Python
-├── generate_hashes.py   # Script auxiliar para generar hash bcrypt de ejemplo
-├── train_recommender.py # Entrena y guarda modelo de recomendación
-├── players.json         # Deportistas favoritos (persistencia local JSON)
-├── precharge_players.json # Catálogo semilla de deportistas
-├── ath_player_cache.json  # Cache de Athlete ID (World Athletics)
-├── extensions.py        # Instancia de SQLAlchemy, Bcrypt
-├── models.py            # Definición de User, Post, Like
-├── routes.py            # Blueprint de micro‑feed (posts, likes, recomendaciones)
-├── basket_api.py        # Wrapper NBA (API‑Sports)
-├── football_api.py      # Wrapper Fútbol (API‑Sports)
-├── wa_scraper.py        # Scraper World Athletics
-├── formula1_api.py      # Wrapper F1 (API‑Sports)
-├── mma_api.py           # Wrapper MMA (API‑Sports)
-├── forms.py             # WTForms (register, login)
+├── app.py                   # Flask app factory & route registration
+├── config.py                # Config classes & .env loader
+├── extensions.py            # SQLAlchemy, Bcrypt, Flask-Login, Redis
+├── models.py                # User, Post, Like ORM definitions
+├── routes/
+│   ├── auth.py              # register_user, login, logout
+│   ├── players.py           # CRUD & detail views
+│   └── posts.py             # micro‑feed API & page
+├── services/
+│   ├── basketball.py        # NBA API wrapper
+│   ├── football.py          # Football API wrapper
+│   ├── athletics.py         # World Athletics scraper
+│   ├── formula1.py          # F1 API wrapper
+│   └── mma.py               # MMA API wrapper
 ├── helpers/
-│   ├── cache.py         # Caching JSON con TTL
-│   └── session.py       # Cliente HTTP con reintentos y límite de llamadas
+│   ├── cache.py             # Disk cache TTL
+│   └── session.py           # HTTP retries & rate limits
+├── train_recommender.py     # offline training script
+├── recommender_model.joblib # persisted recommendation model
+├── requirements.txt         # pip dependencies
+├── players.json             # user favorites
+├── precharge_players.json   # seed catalog
 ├── static/
 │   ├── css/
-│   │   ├── app.css      # Estilos globales
-│   │   └── posts.css    # Estilos específicos del feed
+│   │   ├── app.css          # global theming & responsive
+│   │   └── posts.css        # micro‑feed styles
 │   └── js/
-│       └── posts.js     # Lógica AJAX del micro‑feed
+│       └── posts.js         # feed AJAX logic
 └── templates/
-    ├── layout.html      # Base HTML con navbar
-    ├── index.html       # Portada tras login
-    ├── login.html       # Login con AJAX
-    ├── register_user.html # Registro de cuenta
-    ├── register.html    # Alta manual de deportistas
-    ├── users.html       # Listado collapsible de deportistas
-    ├── player_detail.html # Panel estadístico detallado (AJAX + servidor)
-    ├── posts.html       # Vista central del feed
-    ├── precharge.html   # Catálogo pre‑cargado
-    ├── ranking.html     # Ranking por disciplina (DataTables)
-    └── errors/          # Errores 404, 500
+    ├── base.html            # layout with navbar
+    ├── auth/
+    │   ├── login.html
+    │   └── register_user.html
+    ├── players/
+    │   ├── list.html
+    │   ├── detail.html
+    │   └── form.html
+    ├── posts.html
+    ├── precharge.html
+    ├── ranking.html
+    └── errors/
         ├── 404.html
         └── 500.html
 ```
 
 ---
 
-## ⚙️ Instalación y ejecución (desarrollo)
+## ⚙️ Installation & Development
 
-1. Clona el repositorio:
+```bash
+# Clone & navigate
+git clone https://github.com/almarar10/sportstats-tfg.git
+cd sportstats-tfg
 
-   ```bash
-   git clone https://github.com/almarar10/sportstats-tfg.git
-   cd sportstats-tfg
-   ```
-2. Crea y activa un entorno virtual:
+# Virtual Environment
+python3 -m venv venv
+source venv/bin/activate
 
-   ```bash
-   python -m venv venv
-   source venv/bin/activate
-   ```
-3. Instala dependencias:
+# Dependencies
+pip install -r requirements.txt
 
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Copia y configura variables de entorno:
+# Env Variables
+cp .env.example .env
+# Edit .env: SECRET_KEY, APISPORTS_KEY, MYSQL_*...
 
-   ```bash
-   cp .env.example .env
-   # Edita .env: SECRET_KEY, APISPORTS_KEY, MYSQL_* etc.
-   ```
-5. Inicializa la base de datos:
+# Database Migrations
+flask db upgrade
 
-   ```bash
-   flask db upgrade
-   ```
-6. Entrena el modelo de recomendaciones (\~30 s):
+# Train Model (~30s)
+python train_recommender.py
 
-   ```bash
-   python train_recommender.py
-   ```
-7. Arranca el servidor en modo debug:
-
-   ```bash
-   flask run --debug
-   # Visitar http://127.0.0.1:5000
-   ```
+# Start Dev Server
+env FLASK_ENV=development flask run
+```
 
 ---
 
-## 🚀 Despliegue en producción
+## 🚀 Production Deployment
 
-* Configura un WSGI (Gunicorn) tras Nginx:
+```bash
+# Gunicorn + Nginx
+gunicorn -w 4 -b 0.0.0.0:8000 app:app
+```
 
-  ```bash
-  gunicorn -w 4 -b 0.0.0.0:8000 app:app
-  ```
-* Usa HTTPS (Let’s Encrypt)
-* Variables de entorno: `FLASK_ENV=production`
-* Considera Redis para cache y sesiones si escalas horizontalmente.
+* Use HTTPS (Let's Encrypt)
+* Set `FLASK_ENV=production`
+* Consider Redis for sessions & caching at scale
 
 ---
 
-## 📚 Créditos y licencia
+## 📚 Credits & License
 
-Trabajo Fin de Grado — Grado en Ingeniería Informática (UPSA, 2024/25)
+**Final Degree Project** — B.Sc. in Computer Engineering (UPSA, 2024/25)
+**Author:** Almar Ramos Curto — All rights reserved.
+Non‑academic use requires contacting the author.
 
-Autor: Almar Ramos Curto — todos los derechos reservados.
-Uso académico exclusivamente; para otro tipo de licencia, contactar con el autor.
-
-> “El deporte es la estadística que se vive; SportStats lo hace conversación.”
+> *“Sport is the statistics you live; SportStats makes it a conversation.”*
