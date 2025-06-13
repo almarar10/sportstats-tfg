@@ -56,35 +56,6 @@
     },
     {
         "DatosPersonales": {
-            "id": "008",
-            "name": "Kylian Mbappe",
-            "FirstName": "Kylian",
-            "LastName": "Mbappe",
-            "Gender": "Masculino",
-            "placeofbirth": "Bondy, Paris",
-            "bio": "Kylian Mbappé Lottin (n. 20 de diciembre de 1998, Bondy, Francia) es un futbolista francés que juega como delantero en el Paris Saint-Germain y en la selección de Francia. Debutó profesionalmente con el AS Mónaco en 2015 y conquistó la Ligue 1 en 2017. Ese mismo año fue nombrado Mejor Jugador Joven de la Champions League. En 2018, con 19 años, se proclamó Campeón del Mundo con Francia en Rusia, convirtiéndose en el segundo adolescente en ganar un Mundial (tras Pelé).",
-            "about": "Club actual: Paris Saint-Germain (desde 2017)\r\n\r\nSelección: Francia (desde 2017)\r\n\r\nPosición: Delantero – destaca por su velocidad explosiva y definición clínica\r\n\r\nPremios destacados:\r\n\r\nMejor Jugador Joven en Copa del Mundo 2018\r\n\r\nMáximo goleador de la Ligue 1 (varias temporadas)\r\n\r\nMedalla de la Legión de Honor de Francia (2018)\r\n\r\nEstilo de juego: Combina regate incisivo, potencia física y visión de gol; letal tanto en contragolpe como en espacios cerrados.",
-            "age": 25
-        },
-        "DeporteYHabilidades": {
-            "sport": "2",
-            "sportLevel": "Profesional",
-            "sportIndexList": [
-                "potencia",
-                "goleador",
-                "agilidad",
-                "olfato"
-            ],
-            "Position": "Delantero",
-            "Side": "Diestro",
-            "SportSituation": "",
-            "StartPlayer": "Sí",
-            "athlete_id": "",
-            "jersey": "9"
-        }
-    },
-    {
-        "DatosPersonales": {
             "id": "124",
             "name": "Stephen Curry",
             "FirstName": "Stephen",
@@ -470,51 +441,26 @@
     },
     {
         "DatosPersonales": {
-            "id": "405",
-            "name": "Robert Lewandowski",
-            "FirstName": "Robert",
-            "LastName": "Lewandowski",
+            "id": "501",
+            "name": "Charles Leclerc",
+            "FirstName": "Charles",
+            "LastName": "Leclerc",
             "Gender": "Masculino",
             "placeofbirth": "",
             "bio": "",
             "about": "",
-            "age": 36
+            "age": 27
         },
         "DeporteYHabilidades": {
-            "sport": "2",
+            "sport": "3",
             "sportLevel": "",
             "sportIndexList": [],
-            "Position": "Delantero centro",
+            "Position": "Piloto",
             "Side": "",
             "SportSituation": "",
             "StartPlayer": "",
             "athlete_id": "",
             "jersey": ""
-        }
-    },
-    {
-        "DatosPersonales": {
-            "id": "14755065",
-            "name": "Toni Kroos",
-            "FirstName": "Toni",
-            "LastName": "Kroos",
-            "Gender": "Masculino",
-            "placeofbirth": "Alemania",
-            "bio": "",
-            "about": "",
-            "age": 33
-        },
-        "DeporteYHabilidades": {
-            "sport": "2",
-            "sportLevel": "Retirado :(",
-            "sportIndexList": [],
-            "Position": "Mediocentro",
-            "Side": "Diestro",
-            "SportSituation": "",
-            "StartPlayer": "Sí",
-            "athlete_id": "",
-            "jersey": "8",
-            "games": []
         }
     }
 ]

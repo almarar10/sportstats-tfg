@@ -375,6 +375,12 @@ def index():
     return render_template("index.html", sports=app.config["SPORTS_LIST"])
 
 
+from flask import render_template
+from flask_login import login_required
+import logging
+
+log = logging.getLogger(__name__)
+
 @app.route("/ranking")
 @login_required
 def ranking():
@@ -388,40 +394,39 @@ def ranking():
         try:
             stats = _stats_for_player(p) or {}
         except Exception as e:
-            log.warning("stats error: %s", e)
+            log.warning("stats error for %s: %s", p["DatosPersonales"]["name"], e)
             stats = {}
 
         rank: dict[str, Any] = {"edad": p["DatosPersonales"]["age"]}
 
-        # ─── CÁLCULO DE MÉTRICAS SEGÚN DEPORTE ────────────────────────────────
         if idx == 0:
-            # Atletismo: mostramos la primera marca personal
-            pbs = stats.get("pbs", [])
+            # Atletismo: personal best
+            pbs = stats.get("pbs") or []
             if pbs:
                 best = pbs[0]
-                rank["prueba"] = best.get("discipline", "")
-                rank["marca"]   = best.get("performance", "")
+                rank["prueba"] = best.get("discipline", "") or ""
+                rank["marca"]   = best.get("performance", "") or ""
             else:
                 rank["prueba"] = ""
                 rank["marca"]   = ""
         elif idx == 1:
-            # NBA: puntos, rebotes, asistencias, minutos
-            resp = stats.get("response", []) or []
+            # NBA: single-game stats
+            resp = stats.get("response") or []
             if resp:
                 st = resp[0]
                 rank.update({
-                    "pts": st.get("points", 0),
-                    "reb": st.get("totReb",  0),
-                    "ast": st.get("assists", 0),
-                    "min": st.get("min",     0),
+                    "pts": st.get("points", 0)     or 0,
+                    "reb": st.get("totReb",  0)    or 0,
+                    "ast": st.get("assists", 0)    or 0,
+                    "min": st.get("min",     0)    or 0,
                 })
         elif idx == 2:
-            # Fútbol: resumimos la última temporada
-            seasons   = stats.get("seasons", []) or []
-            stats_map = stats.get("stats", {})   or {}
+            # Fútbol: aggregate last season
+            seasons   = stats.get("seasons") or []
+            stats_map = stats.get("stats")   or {}
             if seasons:
                 last = seasons[-1]
-                lsts = stats_map.get(last, []) or []
+                lsts = stats_map.get(last) or []
                 suma = {
                     "goles":  0,
                     "asis":   0,
@@ -431,38 +436,45 @@ def ranking():
                     "red":    0,
                 }
                 for st in lsts:
-                    goles  = st.get("goals",{}).get("total", 0)
-                    asis   = st.get("goals",{}).get("assists",0)
-                    mins   = st.get("games",{}).get("minutes",0)
-                    yellow = st.get("cards",{}).get("yellow",0)
-                    red    = st.get("cards",{}).get("red",0)
+                    goals_data = st.get("goals") or {}
+                    games_data = st.get("games") or {}
+                    cards_data = st.get("cards") or {}
+
+                    goles  = goals_data.get("total",   0) or 0
+                    asis   = goals_data.get("assists", 0) or 0
+                    mins   = games_data.get("minutes", 0) or 0
+                    yellow = cards_data.get("yellow",  0) or 0
+                    red    = cards_data.get("red",     0) or 0
+
                     suma["goles"]  += goles
                     suma["asis"]   += asis
                     suma["ga"]     += (goles + asis)
                     suma["min"]    += mins
                     suma["yellow"] += yellow
                     suma["red"]    += red
+
                 rank.update(suma)
         elif idx == 3:
-            # Fórmula 1: mundiales, podios, puntos de carrera
-            resp = stats.get("response", []) or []
+            # Fórmula 1
+            resp = stats.get("response") or []
             if resp:
                 drv = resp[0]
                 rank.update({
-                    "mund": drv.get("world_championships", 0),
-                    "pod":  drv.get("podiums",             0),
-                    "pts":  drv.get("career_points",       0),
+                    "mund": drv.get("world_championships", 0) or 0,
+                    "pod":  drv.get("podiums",             0) or 0,
+                    "pts":  drv.get("career_points",       0) or 0,
                 })
         elif idx == 4:
-            # MMA: altura, peso, reach
-            resp = stats.get("response", []) or []
+            # MMA
+            resp = stats.get("response") or []
             if resp:
                 f = resp[0]
                 rank.update({
-                    "altura": f.get("height", ""),
-                    "peso":    f.get("weight", ""),
-                    "reach":   f.get("reach", ""),
+                    "altura": f.get("height", "") or "",
+                    "peso":   f.get("weight", "") or "",
+                    "reach":  f.get("reach",  "") or "",
                 })
+
         p["rank"] = rank
         by_sport[sport_name].append(p)
 
@@ -470,6 +482,7 @@ def ranking():
         lst.sort(key=lambda j: j["rank"]["edad"], reverse=True)
 
     return render_template("ranking.html", ranking=by_sport)
+
 
 
 
